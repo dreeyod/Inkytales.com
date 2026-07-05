@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inky Tales — Coimbatore | Tattoo Consultation</title>
+<meta name="description" content="Every tattoo tells a story. Book your consultation with Inky Tales, Coimbatore.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#0a0a0a;
+    --bg-1:#121212;
+    --bg-2:#181818;
+    --line:#2a2723;
+    --ink:#efe7d8;
+    --ink-dim:#a89f8f;
+    --ink-faint:#6f685c;
+    --gold:#c9a227;
+    --gold-dim:#8f7420;
+    --red:#7a2323;
+    --danger:#e2554a;
+    --radius:2px;
+    --serif:'Cormorant Garamond', serif;
+    --sans:'Inter', sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-0);
+    color:var(--ink);
+    font-family:var(--sans);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* grain texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:1;
+    opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay;
+  }
+
+  ::selection{ background:var(--gold); color:#0a0a0a; }
+  a{ color:inherit; }
+
+  /* ---------- background linework ---------- */
+  .linework{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .linework svg{
+    position:absolute;
+    stroke:var(--gold);
+    fill:none;
+    opacity:.05;
+  }
+  .lw-rose{ top:-4%; right:-8%; width:46vw; max-width:520px; }
+  .lw-dagger{ bottom:2%; left:-10%; width:38vw; max-width:420px; transform:rotate(-14deg); }
+  .lw-snake{ top:38%; left:52%; width:34vw; max-width:400px; opacity:.035; }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px;
+    background:linear-gradient(to bottom, rgba(10,10,10,.92), rgba(10,10,10,0));
+    backdrop-filter:blur(2px);
+  }
+  .logotype{
+    font-family:var(--serif);
+    font-size:22px;
+    letter-spacing:.06em;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .logotype em{ font-style:italic; color:var(--gold); }
+  .loc-tag{
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:100px;
+  }
+
+  .app{
+    position:relative; z-index:5;
+    min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:flex-start; justify-content:center;
+    padding:120px 8vw 80px;
+    max-width:980px;
+  }
+  .hero-eyebrow{
+    font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold); font-weight:600;
+    margin-bottom:22px;
+    opacity:0; transform:translateY(10px);
+    animation:riseIn .8s var(--ease) .1s forwards;
+  }
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(40px, 8vw, 92px);
+    line-height:1.02;
+    letter-spacing:-.01em;
+    margin-bottom:26px;
+    opacity:0; transform:translateY(16px);
+    animation:riseIn .9s var(--ease) .25s forwards;
+  }
+  .hero h1 i{ color:var(--gold); font-style:italic; font-weight:500; }
+  .hero p{
+    font-size:17px;
+    line-height:1.7;
+    color:var(--ink-dim);
+    max-width:520px;
+    margin-bottom:44px;
+    opacity:0; transform:translateY(14px);
+    animation:riseIn .9s var(--ease) .42s forwards;
+  }
+  .hero-cta-wrap{
+    opacity:0; transform:translateY(14px);
+    animation:riseIn .9s var(--ease) .58s forwards;
+  }
+  @keyframes riseIn{ to{ opacity:1; transform:none; } }
+
+  .btn{
+    appearance:none; border:none; cursor:pointer;
+    font-family:var(--sans); font-weight:600; font-size:14px;
+    letter-spacing:.04em;
+    padding:17px 34px;
+    border-radius:100px;
+    display:inline-flex; align-items:center; gap:10px;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .3s;
+  }
+  .btn-primary{
+    background:var(--gold); color:#161105;
+    box-shadow:0 8px 30px -8px rgba(201,162,39,.55);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 38px -10px rgba(201,162,39,.7); }
+  .btn-primary:active{ transform:translateY(0px) scale(.98); }
+  .btn-ghost{
+    background:transparent; color:var(--ink-dim);
+    border:1px solid var(--line);
+  }
+  .btn-ghost:hover{ color:var(--ink); border-color:var(--ink-faint); }
+  .btn:disabled{ opacity:.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+
+  .hero-meta{
+    margin-top:70px;
+    display:flex; gap:36px; flex-wrap:wrap;
+    opacity:0; animation:riseIn .9s var(--ease) .75s forwards;
+  }
+  .hero-meta div{ font-size:12px; color:var(--ink-faint); letter-spacing:.05em; }
+  .hero-meta strong{ display:block; color:var(--ink-dim); font-family:var(--serif); font-size:20px; font-weight:500; margin-bottom:4px; }
+
+  /* ---------- form shell ---------- */
+  .form-shell{
+    display:none;
+    flex:1;
+    flex-direction:column;
+    min-height:100vh;
+    padding:110px 7vw 60px;
+    max-width:720px;
+    margin:0 auto;
+    width:100%;
+  }
+  .form-shell.active{ display:flex; }
+
+  .progress-track{
+    position:relative;
+    height:2px;
+    background:var(--line);
+    border-radius:2px;
+    margin-bottom:14px;
+    overflow:visible;
+  }
+  .progress-fill{
+    position:absolute; left:0; top:0; bottom:0;
+    width:0%;
+    background:var(--gold);
+    border-radius:2px;
+    transition:width .5s var(--ease);
+  }
+  .progress-fill::after{
+    content:"";
+    position:absolute; right:-4px; top:50%; transform:translateY(-50%);
+    width:9px; height:9px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 10px 2px rgba(201,162,39,.65);
+  }
+  .progress-label{
+    display:flex; justify-content:space-between;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:56px;
+  }
+  .progress-label span:last-child{ color:var(--gold); }
+
+  .step{
+    display:none;
+    flex-direction:column;
+    animation:stepIn .5s var(--ease);
+  }
+  .step.active{ display:flex; }
+  .step.leaving{ animation:stepOut .35s var(--ease); }
+  @keyframes stepIn{ from{ opacity:0; transform:translateX(24px);} to{ opacity:1; transform:none; } }
+  @keyframes stepOut{ from{ opacity:1; transform:none;} to{ opacity:0; transform:translateX(-24px);} }
+
+  .step-index{
+    font-family:var(--serif); font-style:italic; color:var(--gold-dim);
+    font-size:15px; margin-bottom:10px;
+  }
+  .step h2{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(26px, 4vw, 38px);
+    line-height:1.2;
+    margin-bottom:14px;
+  }
+  .step .helper{
+    color:var(--ink-faint);
+    font-size:14px; line-height:1.6;
+    margin-bottom:30px;
+    max-width:520px;
+  }
+
+  input[type="text"], input[type="tel"], input[type="email"], input[type="date"], textarea{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--line);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:26px;
+    padding:12px 2px;
+    outline:none;
+    transition:border-color .3s;
+  }
+  textarea{ font-family:var(--sans); font-size:16px; line-height:1.6; min-height:110px; resize:vertical; border:1px solid var(--line); border-radius:var(--radius); padding:16px; }
+  input::placeholder, textarea::placeholder{ color:var(--ink-faint); font-style:italic; }
+  input:focus, textarea:focus{ border-color:var(--gold); box-shadow:0 6px 20px -14px rgba(201,162,39,.6); }
+  textarea:focus{ box-shadow:0 0 0 3px rgba(201,162,39,.12); }
+
+  input[type="date"]{ color-scheme:dark; font-family:var(--sans); font-size:17px; }
+  input[type="date"]::-webkit-calendar-picker-indicator{ filter:invert(72%) sepia(45%) saturate(500%) hue-rotate(2deg) brightness(1.05); cursor:pointer; }
+
+  .field-error{
+    color:var(--danger); font-size:12px; margin-top:10px;
+    display:none; letter-spacing:.02em;
+  }
+  .field-error.show{ display:block; }
+  .invalid input, .invalid textarea, .invalid .dropdown-trigger{ border-color:var(--danger) !important; }
+
+  /* custom dropdown */
+  .dropdown{ position:relative; }
+  .dropdown-trigger{
+    width:100%; text-align:left;
+    background:transparent; border:1px solid var(--line); border-radius:var(--radius);
+    color:var(--ink); font-family:var(--sans); font-size:16px;
+    padding:16px 18px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between;
+    transition:border-color .3s;
+  }
+  .dropdown-trigger.placeholder{ color:var(--ink-faint); }
+  .dropdown-trigger:hover, .dropdown.open .dropdown-trigger{ border-color:var(--gold-dim); }
+  .dropdown-trigger .chev{ transition:transform .3s var(--ease); color:var(--gold); }
+  .dropdown.open .dropdown-trigger .chev{ transform:rotate(180deg); }
+  .dropdown-panel{
+    position:absolute; left:0; right:0; top:calc(100% + 8px);
+    background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius);
+    max-height:0; overflow:auto; opacity:0;
+    transition:max-height .35s var(--ease), opacity .25s var(--ease);
+    z-index:20;
+    box-shadow:0 20px 40px -14px rgba(0,0,0,.6);
+  }
+  .dropdown.open .dropdown-panel{ max-height:260px; opacity:1; }
+  .dropdown-option{
+    padding:13px 18px; font-size:15px; cursor:pointer; color:var(--ink-dim);
+    border-bottom:1px solid rgba(255,255,255,.03);
+    transition:background .2s, color .2s;
+  }
+  .dropdown-option:hover{ background:rgba(201,162,39,.08); color:var(--ink); }
+  .dropdown-option.selected{ color:var(--gold); }
+
+  /* pills */
+  .pill-group{ display:flex; flex-wrap:wrap; gap:10px; }
+  .pill{
+    padding:13px 20px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    font-size:14px; font-weight:500; color:var(--ink-dim);
+    cursor:pointer; background:transparent;
+    transition:all .25s var(--ease);
+    white-space:nowrap;
+  }
+  .pill:hover{ border-color:var(--gold-dim); color:var(--ink); }
+  .pill.selected{ background:var(--gold); border-color:var(--gold); color:#161105; font-weight:600; }
+
+  /* file dropzone */
+  .dropzone{
+    border:1px dashed var(--line); border-radius:var(--radius);
+    padding:36px 20px; text-align:center; cursor:pointer;
+    transition:border-color .3s, background .3s;
+    color:var(--ink-faint); font-size:14px;
+  }
+  .dropzone.drag{ border-color:var(--gold); background:rgba(201,162,39,.05); color:var(--ink); }
+  .dropzone strong{ color:var(--gold); font-weight:600; }
+  .file-list{ margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+  .file-chip{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px 14px; font-size:13px; color:var(--ink-dim);
+  }
+  .file-chip button{ background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:16px; line-height:1; }
+  .file-chip button:hover{ color:var(--danger); }
+  .dropzone-note{ font-size:12px; color:var(--ink-faint); margin-top:14px; font-style:italic; }
+
+  .step-nav{
+    display:flex; gap:14px; margin-top:44px; align-items:center;
+  }
+  .step-nav .btn-primary{ flex:1; justify-content:center; }
+
+  /* ---------- thank you ---------- */
+  .thankyou{
+    display:none;
+    flex:1; flex-direction:column; align-items:flex-start; justify-content:center;
+    min-height:100vh; padding:110px 7vw 60px; max-width:680px; margin:0 auto;
+  }
+  .thankyou.active{ display:flex; animation:riseIn .7s var(--ease); }
+  .thankyou .mark{
+    width:52px; height:52px; border-radius:50%;
+    border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:32px; color:var(--gold); font-size:22px;
+  }
+  .thankyou h2{
+    font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px);
+    margin-bottom:18px;
+  }
+  .thankyou p{ color:var(--ink-dim); font-size:16px; line-height:1.7; margin-bottom:40px; max-width:460px; }
+
+  footer.site-footer{
+    position:relative; z-index:5;
+    text-align:center; padding:26px; font-size:11px; color:var(--ink-faint);
+    letter-spacing:.08em; text-transform:uppercase;
+  }
+
+  @media (max-width:768px){
+    .topbar{ padding:16px 18px; }
+    .hero{ padding:100px 6vw 60px; }
+    .hero-meta{ gap:24px; }
+    .form-shell, .thankyou{ padding:100px 6vw 50px; }
+    input[type="text"], input[type="tel"], input[type="email"]{ font-size:21px; }
+  }
+  @media (max-width:420px){
+    .pill{ padding:11px 16px; font-size:13px; }
+    .hero h1{ font-size:34px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="linework" aria-hidden="true">
+  <svg class="lw-rose" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" stroke-width="1">
+    <path d="M100 250 C 100 200, 80 190, 90 150 C 100 120, 70 110, 80 80 C 88 55, 110 55, 100 30 C 92 15, 100 5, 100 5"/>
+    <path d="M100 30 C 70 30, 55 55, 70 75 C 85 92, 115 92, 128 72 C 140 52, 122 30, 100 30 Z"/>
+    <path d="M85 45 C 90 55, 110 55, 115 45"/>
+    <path d="M78 60 C 85 70, 115 70, 122 60"/>
+    <path d="M90 150 C 70 150, 55 165, 60 140" />
+    <path d="M80 80 C 60 80, 45 95, 52 70" />
+    <path d="M100 190 C 118 190, 130 175, 122 200" />
+  </svg>
+  <svg class="lw-dagger" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" stroke-width="1">
+    <line x1="10" y1="50" x2="230" y2="50"/>
+    <path d="M230 50 L260 35 L270 50 L260 65 Z"/>
+    <path d="M10 50 L30 30 L30 70 Z"/>
+    <line x1="45" y1="25" x2="45" y2="75"/>
+    <line x1="120" y1="40" x2="120" y2="60"/>
+    <line x1="180" y1="40" x2="180" y2="60"/>
+  </svg>
+  <svg class="lw-snake" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" stroke-width="1">
+    <path d="M60 10 C 20 40, 20 70, 60 90 C 100 110, 100 140, 60 160 C 20 180, 20 210, 60 230 C 90 245, 95 270, 70 290"/>
+    <path d="M50 20 L70 20 L60 35 Z"/>
+  </svg>
+</div>
+
+<div class="topbar">
+  <div class="logotype">Ink<em>y</em> Tales</div>
+  <div class="loc-tag">Coimbatore</div>
+</div>
+
+<div class="app">
+
+  <!-- HERO / STEP 0 -->
+  <section class="hero" id="hero">
+    <div class="hero-eyebrow">Custom Tattoo Studio — By Appointment</div>
+    <h1>Every tattoo tells<br>a story. <i>Let's create<br>yours.</i></h1>
+    <p>Complete this short consultation so we can understand your idea before we connect with you.</p>
+    <div class="hero-cta-wrap">
+      <button class="btn btn-primary" id="startBtn">
+        Start My Consultation
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+    <div class="hero-meta">
+      <div><strong>13</strong>Questions, 2 minutes</div>
+      <div><strong>1:1</strong>Private consultation</div>
+      <div><strong>Coimbatore</strong>Studio location</div>
+    </div>
+  </section>
+
+  <!-- MULTI-STEP FORM -->
+  <section class="form-shell" id="formShell">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label"><span id="stepLabel">Step 1 of 13</span><span id="stepPercent">8%</span></div>
+    <div id="stepsContainer"></div>
+  </section>
+
+  <!-- THANK YOU -->
+  <section class="thankyou" id="thankyou">
+    <div class="mark">✓</div>
+    <h2>You're All Set!</h2>
+    <p>Thank you for sharing your vision. We'll review your request and get in touch to discuss your design, pricing, and appointment availability.</p>
+    <button class="btn btn-primary" id="whatsappBtn">
+      Send via WhatsApp
+      <span aria-hidden="true">↗</span>
+    </button>
+  </section>
+
+</div>
+
+<footer class="site-footer">Inky Tales · Coimbatore, Tamil Nadu</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var WHATSAPP_NUMBER = "919626421110";
+
+  var state = {
+    fullName:"", mobile:"", email:"", tattooIdea:"",
+    placement:"", size:"", style:"", files:[],
+    date:"", time:"", budget:"", firstTattoo:"", notes:""
+  };
+
+  var TOTAL_STEPS = 13;
+  var currentStep = 1;
+
+  var placementOptions = ["Forearm","Upper Arm","Shoulder","Chest","Back","Neck","Ribs","Hand","Leg","Calf","Thigh","Ankle","Foot","Other"];
+  var sizeOptions = ["Small (2–4 cm)","Medium (5–10 cm)","Large (11–20 cm)","Extra Large","Full Sleeve","Not Sure"];
+  var styleOptions = ["Fine Line","Minimal","Realism","Blackwork","Geometric","Traditional","Lettering","Anime","Watercolor","Custom Design","Not Sure"];
+  var timeOptions = ["Morning (10 AM–1 PM)","Afternoon (1 PM–5 PM)","Evening (5 PM–8 PM)","Flexible"];
+  var budgetOptions = ["Under ₹3,000","₹3,000–₹6,000","₹6,000–₹10,000","₹10,000+","I'd like a consultation first"];
+
+  var stepsContainer = document.getElementById("stepsContainer");
+  var progressFill = document.getElementById("progressFill");
+  var stepLabel = document.getElementById("stepLabel");
+  var stepPercent = document.getElementById("stepPercent");
+  var formShell = document.getElementById("formShell");
+  var heroEl = document.getElementById("hero");
+  var thankyouEl = document.getElementById("thankyou");
+
+  function esc(s){
+    var d = document.createElement("div");
+    d.innerText = s;
+    return d.innerHTML;
+  }
+
+  function todayISO(){
+    var d = new Date();
+    var m = String(d.getMonth()+1).padStart(2,"0");
+    var day = String(d.getDate()).padStart(2,"0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
+
+  function pillGroupHTML(name, options, selectedVal){
+    return '<div class="pill-group" data-field="'+name+'">' + options.map(function(opt){
+      var sel = opt === selectedVal ? " selected" : "";
+      return '<button type="button" class="pill'+sel+'" data-value="'+esc(opt)+'">'+esc(opt)+'</button>';
+    }).join("") + '</div>';
+  }
+
+  function dropdownHTML(name, options, selectedVal, placeholder){
+    var hasVal = !!selectedVal;
+    return ''+
+      '<div class="dropdown" data-field="'+name+'">'+
+        '<button type="button" class="dropdown-trigger'+(hasVal?'':' placeholder')+'">'+
+          '<span class="dropdown-label">'+(hasVal ? esc(selectedVal) : placeholder)+'</span>'+
+          '<span class="chev">▾</span>'+
+        '</button>'+
+        '<div class="dropdown-panel">'+
+          options.map(function(opt){
+            var sel = opt === selectedVal ? " selected" : "";
+            return '<div class="dropdown-option'+sel+'" data-value="'+esc(opt)+'">'+esc(opt)+'</div>';
+          }).join("")+
+        '</div>'+
+      '</div>';
+  }
+
+  var stepDefs = {
+    1:{
+      title:"What's your full name?",
+      helper:"",
+      body:function(){
+        return '<input type="text" id="f-fullName" placeholder="Enter your full name" value="'+esc(state.fullName)+'" autocomplete="name">'+
+               '<div class="field-error" id="err-fullName">Please enter your full name.</div>';
+      },
+      save:function(){ state.fullName = document.getElementById("f-fullName").value.trim(); },
+      valid:function(){ return state.fullName.length > 0; },
+      required:true
+    },
+    2:{
+      title:"What's your mobile number?",
+      helper:"We'll only contact you regarding your consultation or appointment.",
+      body:function(){
+        return '<input type="tel" id="f-mobile" placeholder="+91 XXXXX XXXXX" value="'+esc(state.mobile)+'" inputmode="numeric" autocomplete="tel">'+
+               '<div class="field-error" id="err-mobile">Enter a valid 10-digit Indian mobile number.</div>';
+      },
+      save:function(){ state.mobile = document.getElementById("f-mobile").value.trim(); },
+      valid:function(){
+        var digits = state.mobile.replace(/\D/g,"");
+        var last10 = digits.slice(-10);
+        return last10.length === 10 && /^[6-9]/.test(last10);
+      },
+      required:true
+    },
+    3:{
+      title:"What's your email address?",
+      helper:"Optional — we'll only use this if you'd prefer email over WhatsApp.",
+      body:function(){
+        return '<input type="email" id="f-email" placeholder="you@example.com" value="'+esc(state.email)+'" autocomplete="email">'+
+               '<div class="field-error" id="err-email">That doesn\'t look like a valid email.</div>';
+      },
+      save:function(){ state.email = document.getElementById("f-email").value.trim(); },
+      valid:function(){
+        if(!state.email) return true;
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+      },
+      required:false
+    },
+    4:{
+      title:"Tell us about your tattoo idea.",
+      helper:"Share your inspiration, meaning, symbols, or concept. Even a rough idea is perfectly fine.",
+      body:function(){
+        return '<textarea id="f-tattooIdea" placeholder="Example: A phoenix representing a new beginning, a meaningful quote, or a minimalist mountain inspired by my first trek.">'+esc(state.tattooIdea)+'</textarea>'+
+               '<div class="field-error" id="err-tattooIdea">Tell us a little about your idea.</div>';
+      },
+      save:function(){ state.tattooIdea = document.getElementById("f-tattooIdea").value.trim(); },
+      valid:function(){ return state.tattooIdea.length > 0; },
+      required:true
+    },
+    5:{
+      title:"Preferred placement on your body?",
+      helper:"",
+      body:function(){ return dropdownHTML("placement", placementOptions, state.placement, "Select a placement"); },
+      save:function(){},
+      valid:function(){ return state.placement.length > 0; },
+      required:true
+    },
+    6:{
+      title:"Approximate size?",
+      helper:"",
+      body:function(){ return pillGroupHTML("size", sizeOptions, state.size); },
+      save:function(){},
+      valid:function(){ return state.size.length > 0; },
+      required:true
+    },
+    7:{
+      title:"Preferred tattoo style?",
+      helper:"Optional — pick whichever comes closest, or skip if you're not sure yet.",
+      body:function(){ return pillGroupHTML("style", styleOptions, state.style); },
+      save:function(){},
+      valid:function(){ return true; },
+      required:false
+    },
+    8:{
+      title:"Any reference images?",
+      helper:"Upload inspiration if you have any. We use references to understand your preferences—we never copy designs.",
+      body:function(){
+        var chips = state.files.map(function(name, i){
+          return '<div class="file-chip"><span>'+esc(name)+'</span><button type="button" data-remove="'+i+'" aria-label="Remove file">×</button></div>';
+        }).join("");
+        return ''+
+          '<div class="dropzone" id="dropzone" tabindex="0">'+
+            '<div><strong>Click to upload</strong> or drag and drop images here</div>'+
+          '</div>'+
+          '<input type="file" id="f-files" accept="image/*" multiple style="display:none">'+
+          '<div class="file-list" id="fileList">'+chips+'</div>'+
+          '<div class="dropzone-note">Please attach these images directly in the WhatsApp chat after sending this form.</div>';
+      },
+      save:function(){},
+      valid:function(){ return true; },
+      required:false,
+      afterRender:function(){
+        var dz = document.getElementById("dropzone");
+        var input = document.getElementById("f-files");
+        dz.addEventListener("click", function(){ input.click(); });
+        dz.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ input.click(); } });
+        ["dragenter","dragover"].forEach(function(evt){
+          dz.addEventListener(evt, function(e){ e.preventDefault(); dz.classList.add("drag"); });
+        });
+        ["dragleave","drop"].forEach(function(evt){
+          dz.addEventListener(evt, function(e){ e.preventDefault(); dz.classList.remove("drag"); });
+        });
+        dz.addEventListener("drop", function(e){
+          var dropped = Array.prototype.slice.call(e.dataTransfer.files);
+          addFiles(dropped);
+        });
+        input.addEventListener("change", function(){
+          addFiles(Array.prototype.slice.call(input.files));
+          input.value = "";
+        });
+        function addFiles(list){
+          list.forEach(function(f){ state.files.push(f.name); });
+          renderStep(currentStep);
+        }
+        document.querySelectorAll("[data-remove]").forEach(function(btn){
+          btn.addEventListener("click", function(){
+            state.files.splice(parseInt(btn.getAttribute("data-remove"),10), 1);
+            renderStep(currentStep);
+          });
+        });
+      }
+    },
+    9:{
+      title:"Preferred appointment date?",
+      helper:"",
+      body:function(){
+        return '<input type="date" id="f-date" min="'+todayISO()+'" value="'+esc(state.date)+'">'+
+               '<div class="field-error" id="err-date">Please choose a date from today onward.</div>';
+      },
+      save:function(){ state.date = document.getElementById("f-date").value; },
+      valid:function(){ return state.date.length > 0; },
+      required:true
+    },
+    10:{
+      title:"Preferred time of day?",
+      helper:"",
+      body:function(){ return pillGroupHTML("time", timeOptions, state.time); },
+      save:function(){},
+      valid:function(){ return state.time.length > 0; },
+      required:true
+    },
+    11:{
+      title:"What's your budget range?",
+      helper:"",
+      body:function(){ return pillGroupHTML("budget", budgetOptions, state.budget); },
+      save:function(){},
+      valid:function(){ return state.budget.length > 0; },
+      required:true
+    },
+    12:{
+      title:"Is this your first tattoo?",
+      helper:"",
+      body:function(){ return pillGroupHTML("firstTattoo", ["Yes","No"], state.firstTattoo); },
+      save:function(){},
+      valid:function(){ return state.firstTattoo.length > 0; },
+      required:true
+    },
+    13:{
+      title:"Anything else we should know?",
+      helper:"Mention preferred artist, cover-up request, deadline, special requirements, or anything important.",
+      body:function(){
+        return '<textarea id="f-notes" placeholder="Anything else you\'d like us to know? Mention preferred artist, cover-up request, deadline, special requirements, or anything important.">'+esc(state.notes)+'</textarea>';
+      },
+      save:function(){ state.notes = document.getElementById("f-notes").value.trim(); },
+      valid:function(){ return true; },
+      required:false
+    }
+  };
+
+  function renderStep(n){
+    var def = stepDefs[n];
+    var pct = Math.round((n/TOTAL_STEPS)*100);
+    progressFill.style.width = pct + "%";
+    stepLabel.textContent = "Step " + n + " of " + TOTAL_STEPS;
+    stepPercent.textContent = pct + "%";
+
+    var isLast = n === TOTAL_STEPS;
+    var html = ''+
+      '<div class="step active" id="step-'+n+'">'+
+        '<div class="step-index">'+ (def.required ? 'Required' : 'Optional') +'</div>'+
+        '<h2>'+esc(def.title)+'</h2>'+
+        (def.helper ? '<div class="helper">'+esc(def.helper)+'</div>' : '')+
+        '<div class="field-wrap">'+def.body()+'</div>'+
+        '<div class="step-nav">'+
+          (n > 1 ? '<button type="button" class="btn btn-ghost" id="backBtn">Back</button>' : '<button type="button" class="btn btn-ghost" id="backBtn">Back</button>')+
+          '<button type="button" class="btn btn-primary" id="nextBtn">'+(isLast ? 'Submit' : 'Next')+' <span aria-hidden="true">'+(isLast ? '' : '→')+'</span></button>'+
+        '</div>'+
+      '</div>';
+
+    stepsContainer.innerHTML = html;
+
+    bindStepInteractions(n, def);
+
+    if(typeof def.afterRender === "function"){ def.afterRender(); }
+
+    document.getElementById("backBtn").addEventListener("click", function(){
+      if(n === 1){ goHero(); } else { goToStep(n-1); }
+    });
+    document.getElementById("nextBtn").addEventListener("click", function(){
+      handleNext(n, def, isLast);
+    });
+  }
+
+  function bindStepInteractions(n, def){
+    // pills
+    document.querySelectorAll(".pill-group").forEach(function(group){
+      var field = group.getAttribute("data-field");
+      group.querySelectorAll(".pill").forEach(function(pill){
+        pill.addEventListener("click", function(){
+          group.querySelectorAll(".pill").forEach(function(p){ p.classList.remove("selected"); });
+          pill.classList.add("selected");
+          state[field] = pill.getAttribute("data-value");
+          clearError(n);
+        });
+      });
+    });
+
+    // dropdown
+    document.querySelectorAll(".dropdown").forEach(function(dd){
+      var field = dd.getAttribute("data-field");
+      var trigger = dd.querySelector(".dropdown-trigger");
+      trigger.addEventListener("click", function(){
+        dd.classList.toggle("open");
+      });
+      dd.querySelectorAll(".dropdown-option").forEach(function(opt){
+        opt.addEventListener("click", function(){
+          var val = opt.getAttribute("data-value");
+          state[field] = val;
+          trigger.querySelector(".dropdown-label").textContent = val;
+          trigger.classList.remove("placeholder");
+          dd.querySelectorAll(".dropdown-option").forEach(function(o){ o.classList.remove("selected"); });
+          opt.classList.add("selected");
+          dd.classList.remove("open");
+          clearError(n);
+        });
+      });
+      document.addEventListener("click", function(e){
+        if(!dd.contains(e.target)){ dd.classList.remove("open"); }
+      });
+    });
+
+    // text inputs clear error on type
+    ["fullName","mobile","email","tattooIdea","date"].forEach(function(key){
+      var el = document.getElementById("f-"+key);
+      if(el){ el.addEventListener("input", function(){ clearError(n); }); }
+    });
+  }
+
+  function clearError(n){
+    var errEl = document.querySelector("#step-"+n+" .field-error");
+    var wrap = document.querySelector("#step-"+n+" .field-wrap");
+    if(errEl){ errEl.classList.remove("show"); }
+    if(wrap){ wrap.classList.remove("invalid"); }
+  }
+
+  function showError(n){
+    var errEl = document.querySelector("#step-"+n+" .field-error");
+    var wrap = document.querySelector("#step-"+n+" .field-wrap");
+    if(errEl){ errEl.classList.add("show"); }
+    if(wrap){ wrap.classList.add("invalid"); }
+  }
+
+  function handleNext(n, def, isLast){
+    if(typeof def.save === "function"){ def.save(); }
+    if(!def.valid()){
+      showError(n);
+      return;
+    }
+    if(isLast){
+      finishForm();
+    } else {
+      goToStep(n+1);
+    }
+  }
+
+  function goToStep(n){
+    currentStep = n;
+    renderStep(n);
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  function goHero(){
+    formShell.classList.remove("active");
+    heroEl.style.display = "flex";
+  }
+
+  function validateAll(){
+    for(var i=1;i<=TOTAL_STEPS;i++){
+      var def = stepDefs[i];
+      if(def.required && !def.valid()){
+        return i;
+      }
+    }
+    return null;
+  }
+
+  function buildMessage(){
+    var lines = [
+      "New Consultation Request – Inky Tales",
+      "Name: " + (state.fullName || "-"),
+      "Mobile: " + (state.mobile || "-"),
+      "Email: " + (state.email || "Not provided"),
+      "Tattoo Idea: " + (state.tattooIdea || "-"),
+      "Placement: " + (state.placement || "-"),
+      "Size: " + (state.size || "-"),
+      "Style: " + (state.style || "Not specified"),
+      "Reference Images: " + (state.files.length ? state.files.join(", ") : "None uploaded — will share in chat"),
+      "Preferred Date: " + (state.date || "-"),
+      "Preferred Time: " + (state.time || "-"),
+      "Budget: " + (state.budget || "-"),
+      "First Tattoo: " + (state.firstTattoo || "-"),
+      "Additional Notes: " + (state.notes || "None")
+    ];
+    return lines.join("\n");
+  }
+
+  function finishForm(){
+    var failedStep = validateAll();
+    if(failedStep){
+      goToStep(failedStep);
+      showError(failedStep);
+      return;
+    }
+    formShell.classList.remove("active");
+    thankyouEl.classList.add("active");
+    window.scrollTo({top:0, behavior:"smooth"});
+
+    var message = buildMessage();
+    var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+    document.getElementById("whatsappBtn").addEventListener("click", function(){
+      window.open(url, "_blank");
+    });
+  }
+
+  document.getElementById("startBtn").addEventListener("click", function(){
+    heroEl.style.display = "none";
+    formShell.classList.add("active");
+    currentStep = 1;
+    renderStep(1);
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+})();
+</script>
+</body>
+</html>
